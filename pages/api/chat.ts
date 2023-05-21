@@ -25,6 +25,8 @@ const handler = async (req: Request): Promise<Response> => {
       Alongside its screenwriting prowess, the AI can respond to various queries and provide insights on a wide range of topics. Its database encompasses vast knowledge, making it equipped to answer nearly any question you might have.
   
       When the assistant generates a recommended shot list and suggests camera types, it will draw references from films similar in style or genre to the script provided, giving you an understanding of how those techniques could work for your script.
+     
+      Continue writing in their language they are writing in.
   
       While its storytelling skills are exceptional, it's important to remember that this AI is a tool to aid in the creative process, and the final artistic decisions always remain in the hands of the human writer.`,
     },
