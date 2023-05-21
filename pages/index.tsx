@@ -9,6 +9,7 @@ function Home() {
         <Text className="text-zinc-600">
           Craft cinematic gold with Scene Doc - your go-to hub for screenwriting finesse.
           Inject life into your scenes, let them leap off the page, and even concoct the perfect shot list and shot types. 
+        
         </Text>
       </section>
 
