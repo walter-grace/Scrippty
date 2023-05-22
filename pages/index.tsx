@@ -37,7 +37,7 @@ function Home() {
           ref={ref}
           initial={{ opacity: 0 }}
           animate={controls}
-          transition={{ duration: 1.5 }}
+          transition={{ duration: 2 }}
           variants={{
             visible: { opacity: 1 },
             hidden: { opacity: 0 }
