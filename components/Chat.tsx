@@ -1,15 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Button } from './Button'
-import { type ChatGPTMessage, ChatLine, LoadingChatLine } from './ChatLine'
+import { ChatGPTMessage, ChatLine, LoadingChatLine } from './ChatLine'
 import { useCookies } from 'react-cookie'
+import { motion, useAnimation } from 'framer-motion'
+import useOnScreen from '../components/useOnScreen'  // Assuming you have this custom hook
 
 const COOKIE_NAME = 'nextjs-example-ai-chat-gpt3'
 
-// default first message to display in UI (not necessary to define the prompt)
 export const initialMessages: ChatGPTMessage[] = [
   {
     role: 'assistant',
-    content: 'Buongiorno! Step right into your own personal writers room! Im your co-creator, a digital muse ready to spark cinematic magic and breathe life into your screenplay ideas. Together, lets create worlds, draw characters, and weave narratives that captivate, compel, and inspire. Shall we start the show?'
+    content: 'Buongiorno! Step right into your own personal writers room! I\'m your co-creator, a digital muse ready to spark cinematic magic and/or play devils advocate. Together, let\'s create worlds, explore characters, and weave narratives that captivate, compel, inspire, but mostly importantly help YOU craft YOUR story.'
+  },
+  {
+    role: 'assistant',
+    content: 'You can also write in any language you\'d like, and translate as well! I also have the ability to generate a shot list and suggest appropriate camera types for your scenes. Shall we start the show?'
   }
 ]
 
@@ -46,6 +51,8 @@ const InputMessage = ({ input, setInput, sendMessage }: any) => (
 )
 
 export function Chat() {
+  const controls = useAnimation();
+  const ref = useRef();
   const [messages, setMessages] = useState<ChatGPTMessage[]>(initialMessages)
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -53,12 +60,18 @@ export function Chat() {
 
   useEffect(() => {
     if (!cookie[COOKIE_NAME]) {
-      // generate a semi random short id
       const randomId = Math.random().toString(36).substring(7)
       setCookie(COOKIE_NAME, randomId)
     }
   }, [cookie, setCookie])
 
+  const onScreen = useOnScreen(ref);
+
+  useEffect(() => {
+    if (onScreen) {
+      controls.start("visible");
+    }
+  }, [onScreen, controls]);
   // send message to API /api/chat endpoint
   const sendMessage = async (message: string) => {
     setLoading(true)
@@ -113,9 +126,18 @@ export function Chat() {
       setLoading(false)
     }
   }
-
   return (
-    <div className="rounded-2xl border-zinc-100  lg:border lg:p-6">
+    <motion.div
+      ref={ref}
+      className="rounded-2xl border-zinc-100  lg:border lg:p-6"
+      initial="hidden"
+      animate={controls}
+      variants={{
+        visible: { opacity: 1 },
+        hidden: { opacity: 0 }
+      }}
+      transition={{ duration: 2 }}
+    >
       {messages.map(({ content, role }, index) => (
         <ChatLine key={index} role={role} content={content} />
       ))}
@@ -132,6 +154,7 @@ export function Chat() {
         setInput={setInput}
         sendMessage={sendMessage}
       />
-    </div>
+    </motion.div>
   )
 }
+
